@@ -1,15 +1,19 @@
 #include <spectogram/visualizer.hpp>
 #include <spectogram/platform.hpp>
+#include <iostream>
 
-Visualizer::Visualizer(const Config& config) : m_canvas{config.spectogram_size} {
-    m_window.create(sf::VideoMode(config.initial_winsize), "Spectogram");
+Visualizer::Visualizer(const Config& config, RingBuffer<SpectrumFrame>& buf)
+    : m_window{sf::VideoMode(config.initial_winsize), "Spectogram"},
+      m_canvas{config.spectogram_resolution, buf},
+      m_gui{m_window},
+      m_is_sidebar_open{!config.collapse_sidebar},
+      m_sidebar_width{config.sidebar_width},
+      m_statusbar_height{config.statusbar_height},
+      m_no_sidebar_winsize{config.no_sidebar_winsize}
+{
     m_window.setMinimumSize(config.min_winsize);
-    m_gui.setTarget(m_window);
-    
-    m_is_sidebar_open = !config.collapse_sidebar;
-    m_sidebar_width = config.sidebar_width;
-    m_statusbar_height = config.statusbar_height;
-    m_no_sidebar_winsize = config.no_sidebar_winsize;
+    m_window.setVerticalSyncEnabled(true);
+    init(config);
 }
 
 void Visualizer::init(const Config& config) {
@@ -50,7 +54,8 @@ void Visualizer::loop() {
             
             handle_event(*event);
         }
-
+        
+        std::cout << m_canvas.num_available() << std::endl;
         draw_frame();
     }
 }
@@ -62,8 +67,7 @@ void Visualizer::draw_frame() {
 }
 
 void Visualizer::render() {
-    std::vector<std::complex<double>> dummy_data{};
-    update_canvas(dummy_data);
+    m_canvas.update_plot();
     m_canvas.draw();
     m_gui.draw();
 }
@@ -103,6 +107,10 @@ void Visualizer::handle_event(const sf::Event& event) {
         m_window.setView(sf::View(sf::FloatRect({0.f, 0.f}, sf::Vector2f(new_size))));
         
         update_layout();
+    } else if (const auto* key = event.getIf<sf::Event::KeyPressed>()) {
+        if (key->code == sf::Keyboard::Key::Q && key->control) {
+            m_window.close();
+        }
     }
 }
 
@@ -154,16 +162,6 @@ void Visualizer::on_native_resize() {
         draw_frame();
 
     m_in_native_resize = false;
-}
-
-void Visualizer::update_canvas(std::vector<std::complex<double>>& data) {
-    auto colors = assign_colors(data);
-    
-    m_canvas.update_plot(colors);
-}
-
-std::vector<uint8_t> Visualizer::assign_colors(std::vector<std::complex<double>>& data) {
-    return std::vector<uint8_t>{0, 1};
 }
 
 Visualizer::~Visualizer() {

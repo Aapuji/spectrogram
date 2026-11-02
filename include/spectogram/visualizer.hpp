@@ -9,11 +9,13 @@
 
 #include "canvas.hpp"
 #include "config.hpp"
+#include "frame.hpp"
+#include "ring_buffer.hpp"
 
 class Visualizer {
 private:
     sf::RenderWindow m_window;
-    SpectogramCanvas m_canvas;
+    SpectrogramCanvas m_canvas;
 
     tgui::Gui m_gui;
     tgui::Panel::Ptr m_sidebar;
@@ -27,10 +29,11 @@ private:
     sf::Vector2u m_no_sidebar_winsize;
     bool m_is_sidebar_hidden = false;
 
-    void draw_frame();
+    void init(const Config& config);
     void maximize();
     void update_layout();
-    void render();
+    void draw_frame();
+    void render(); // TODO: use SpectrumFrame's instead
     void toggle_sidebar();
     void handle_event(const sf::Event& event);
     void disable_sidebar();
@@ -40,11 +43,8 @@ private:
     /// 
     /// Needed because there isn't a way to cross-platform render/change layout while the window is resizing. Only afterwards.
     void on_native_resize();
-
-    void update_canvas(std::vector<std::complex<double>>& data);
-    std::vector<uint8_t> assign_colors(std::vector<std::complex<double>>& data);
 public:
-    Visualizer(const Config& config);
+    Visualizer(const Config& config, RingBuffer<SpectrumFrame>& buf);
     ~Visualizer();
 
     Visualizer(const Visualizer&) = delete;
@@ -53,6 +53,5 @@ public:
     Visualizer(Visualizer&& other) noexcept = default;
     Visualizer& operator=(Visualizer&& other) noexcept = default;
 
-    void init(const Config& config);
     void loop();
 };

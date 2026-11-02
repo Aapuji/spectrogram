@@ -49,3 +49,11 @@ But the key idea is realizing that my rendering code is good, but wasn't trigger
 Also note, thanks to claude again, is that my solution actually depends on an internal implementation detail, because SFML tracks continuous resizes while dragging and caches the size until its done, and then emits a resize event. Specifically it checks if it is mid-drag by checking a flag set by `WM_ENTERSIZEMOVE` flag which is cleared by `WM_EXITSIZEMOVE`. When it gets cleared, then it emits a resize event. So what I'm doing is sending a fake `WM_EXITSIZEMOVE` and then a fake `WM_ENTERSIZEMOVE` again so that it keeps queuing all drag changes. But this is really an internal detail I think, so yeah. Current version of SFML being used is 3.0.2, which I am now requiring to be exact. 
 ## Fixing Graphical Error with Resizing
 After doing this, I noticed when I was resizing many visual artifacts were showing up on the `CanvasSFML`. The two problems were that I was accidentally calling `m_gui.add(m_canvas.widget())` in `update_layout`, when that should only happen in `init`. And the second issue was that I forgot to call `m_canvas.update_layout`, thus the old scale coordinated were being used.
+# Designing Ring Buffer
+Designing it and implementing it initially was not difficult at all. However, the bigger thing was making it thread safe but also nice and fast for use in the audio thread for example.
+
+I learned a lot! Like memory orders and whatnot.
+# Rendering Plan
+Spectrogram canvas will have two ring buffers. One is a reference to the `fft -> gui` ring buffer, and one is an owned buffer storing all the float data for the texture, so that changing the color scheme can still be done.
+
+Then, for rendering, we give way to a fragment shader. In the fragment shader, we simulate the effect of a ring buffer as well. We keep track of a pointer index into the texture. When we add a column, we overwrite the column at the pointer and increment. We then render the texture starting at the pointer with `fract` which does repeat.
