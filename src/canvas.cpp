@@ -62,7 +62,7 @@ std::vector<uint8_t> SpectrogramCanvas::color_frame(const SpectrumFrame& frame) 
     std::vector<uint8_t> colors;
     colors.reserve(frame.bins.size() * 4);
 
-    for (const auto& bin : frame.bins/* | std::views::reverse*/) {
+    for (const auto& bin : frame.bins | std::views::reverse) {
         colors.push_back(static_cast<uint8_t>(bin * 255));
         colors.push_back(0);
         colors.push_back(0);
