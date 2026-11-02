@@ -17,7 +17,7 @@ SpectrogramCanvas::SpectrogramCanvas(sf::Vector2u data_size, RingBuffer<Spectrum
         static_cast<float>(data_size.y)
       })}
 {
-    m_texture.setSmooth(true);
+    // m_texture.setSmooth(true);
     m_texture.setRepeated(true);
 }
 
@@ -74,9 +74,9 @@ std::vector<uint8_t> SpectrogramCanvas::color_frame(const SpectrumFrame& frame) 
 
 std::vector<uint8_t> SpectrogramCanvas::color_frame() const {
     std::vector<uint8_t> colors;
-    colors.reserve(255 * 4);
+    colors.reserve(512 * 4);
 
-    for (int i = 254; i >= 0; i--) {
+    for (int i = 0; i < 512; i++) {
         colors.push_back(0);
         colors.push_back(0);
         colors.push_back(0);

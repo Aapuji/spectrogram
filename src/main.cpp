@@ -9,10 +9,10 @@ int main() {
     const float INCR_512 = 1.f / 512;
     for (auto x = 0; x < 512; x++) {
         std::vector<float> frame_data;
-        frame_data.reserve(255);
+        frame_data.reserve(512);
 
         for (auto y = 0; y < 512; y++) {
-            frame_data.push_back(y * INCR_512);
+            frame_data.push_back((x+y) * INCR_512 / 2);
         }
 
         SpectrumFrame frame{frame_data};

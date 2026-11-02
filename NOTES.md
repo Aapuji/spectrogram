@@ -56,4 +56,4 @@ I learned a lot! Like memory orders and whatnot.
 # Rendering Plan
 Spectrogram canvas will have two ring buffers. One is a reference to the `fft -> gui` ring buffer, and one is an owned buffer storing all the float data for the texture, so that changing the color scheme can still be done.
 
-Then, for rendering, we give way to a fragment shader. In the fragment shader, we simulate the effect of a ring buffer as well. We keep track of a pointer index into the texture. When we add a column, we overwrite the column at the pointer and increment. We then render the texture starting at the pointer with `fract` which does repeat.
+I don't need a shader because I can just do set repeated via SFML anyways. But with this, I can't have smoothing, because then the bottom pixel gets smoothed with the top pixel, so it looks bad.
