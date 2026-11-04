@@ -1,4 +1,4 @@
-#include <spectogram/platform.hpp>
+#include <spectrogram/platform.hpp>
 
 #include <windows.h>
 

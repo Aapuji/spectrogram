@@ -1,4 +1,4 @@
-#include <spectogram/canvas.hpp>
+#include <spectrogram/canvas.hpp>
 
 #include <iostream>
 #include <ranges> 

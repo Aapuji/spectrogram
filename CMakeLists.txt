@@ -10,6 +10,7 @@ project(spectrogram
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Define the main target (Build as a library)
 add_library(spectrogram_lib STATIC 
@@ -59,7 +60,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_SOURCE_DIR}")
 add_executable(spectrogram 
     src/main.cpp
 )
-
 
 # target_include_directories(spectogram PRIVATE 
 #     "$<BUILD_INTERFACE:${SHADER_HEADER_DIR}>"

@@ -1,5 +1,5 @@
-#include <spectogram/visualizer.hpp>
-#include <spectogram/platform.hpp>
+#include <spectrogram/visualizer.hpp>
+#include <spectrogram/platform.hpp>
 #include <iostream>
 
 Visualizer::Visualizer(const Config& config, RingBuffer<SpectrumFrame>& buf)

@@ -1,7 +1,7 @@
+#include <spectrogram/platform.hpp>
+
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
-
-#include <spectogram/platform.hpp>
 
 void platform::maximize_window(sf::WindowHandle handle) {
     Display* display = XOpenDisplay(nullptr);

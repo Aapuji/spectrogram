@@ -1,4 +1,4 @@
-#include <spectogram/platform.hpp>
+#include <spectrogram/platform.hpp>
 #import <Cocoa/Cocoa.h>
 
 static id g_observer = nil;

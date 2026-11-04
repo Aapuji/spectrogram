@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <spectogram/visualizer.hpp>
+#include <spectrogram/visualizer.hpp>
 
 int main() {
     Config config{};
